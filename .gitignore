@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+node_modules/
+.expo/
+dist/
+android/
+ios/
+data/raw/
+data/manifests/
+artifacts/
+*.onnx
+*.pt
+*.zip
+.DS_Store

@@ -1,0 +1,11 @@
+onnx>=1.16.0
+onnxruntime>=1.18.0
+pandas>=2.0
+pyyaml>=6.0
+matplotlib>=3.8
+scikit-learn>=1.4
+pillow>=10.0
+datasets>=2.19
+tqdm>=4.66
+torchinfo>=1.8
+pytest>=8.0
