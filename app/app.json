@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "CheckMaize",
+    "slug": "checkmaize",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "plugins": ["expo-dev-client"],
+    "ios": {
+      "bundleIdentifier": "com.checkmaize.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.checkmaize.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

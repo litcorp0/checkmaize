@@ -1,0 +1,50 @@
+{
+  "name": "checkmaize",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "dependencies": {
+    "expo": "~57.0.12",
+    "expo-status-bar": "~57.0.1",
+    "expo-dev-client": "~5.2.0",
+    "expo-camera": "~16.1.0",
+    "expo-image-picker": "~16.1.0",
+    "expo-image-manipulator": "~13.1.0",
+    "expo-file-system": "~18.1.0",
+    "expo-location": "~18.1.0",
+    "expo-sqlite": "~15.1.0",
+    "expo-sharing": "~13.1.0",
+    "expo-asset": "~11.1.0",
+    "react": "19.2.3",
+    "react-native": "0.86.2",
+    "react-native-screens": "~4.13.0",
+    "react-native-safe-area-context": "~4.15.0",
+    "@react-navigation/native": "~7.1.0",
+    "@react-navigation/native-stack": "~7.4.0",
+    "@react-navigation/bottom-tabs": "~7.4.0",
+    "jpeg-js": "^0.4.4",
+    "onnxruntime-react-native": "1.24.3"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "@types/jpeg-js": "^0.3.3",
+    "typescript": "~6.0.3",
+    "jest-expo": "~57.0.0",
+    "jest": "~30.0.0",
+    "pngjs": "^7.0.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/fix-onnxruntime.js",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|onnxruntime-react-native)"
+    ]
+  },
+  "private": true
+}
