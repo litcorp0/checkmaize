@@ -14,3 +14,8 @@ artifacts/
 *.pt
 *.zip
 .DS_Store
+.venv/
+.pytest_cache/
+*.pth
+.vscode/
+.idea/
