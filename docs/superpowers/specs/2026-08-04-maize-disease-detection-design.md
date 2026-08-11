@@ -155,6 +155,12 @@ label index, verification report. Shared with `benchmarks/` — no duplicate wor
 **Stack:** Expo (React Native, TypeScript) + `expo-dev-client` +
 `onnxruntime-react-native` + EAS Build (APK + IPA). Managed workflow unsupported
 (onnxruntime is a native module → dev build/prebuild required).
+**Version pin (updated after compatibility research, Aug 2026):** Expo SDK 57
+(RN 0.86, New Architecture, Gradle 9) with `onnxruntime-react-native` 1.24.3,
+patched via postinstall script (remove `unimodule.json` to unblock autolinking;
+remove the dead Gradle `VersionNumber` block). No fp16 models (Hermes lacks
+`Float16Array`). Android is the primary validation platform; iOS standalone
+model loading is the residual risk (upstream issue #27062).
 
 **Screens/flows:**
 1. **Capture** — camera or gallery import of a single symptomatic leaf (framing
