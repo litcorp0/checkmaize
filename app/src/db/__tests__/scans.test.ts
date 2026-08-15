@@ -1,19 +1,35 @@
 jest.mock('expo-sqlite', () => {
   let nextId = 0;
-  const rows: any[] = [];
+  let rows: any[] = [];
   const db = {
     execAsync: jest.fn(async () => {}),
-    runAsync: jest.fn(async (_sql: string, ...args: any[]) => {
-      nextId += 1;
-      rows.push({ id: nextId, created_at: args[0], image_uri: args[1], prediction: args[2], confidence: args[3], latitude: args[4], longitude: args[5] });
-      return { lastInsertRowId: nextId };
+    runAsync: jest.fn(async (sql: string, ...args: any[]) => {
+      if (sql.startsWith('DELETE')) {
+        rows = rows.filter((r) => r.id !== args[0]);
+        return { lastInsertRowId: 0, changes: 1 };
+      }
+      if (sql.startsWith('INSERT')) {
+        nextId += 1;
+        rows.push({ id: nextId, created_at: args[0], image_uri: args[1], prediction: args[2], confidence: args[3], latitude: args[4], longitude: args[5] });
+        return { lastInsertRowId: nextId };
+      }
+      return { lastInsertRowId: 0 };
     }),
-    getAllAsync: jest.fn(async () => rows),
+    getAllAsync: jest.fn(async () => [...rows].sort((a, b) => (a.created_at < b.created_at ? 1 : -1))),
+    __reset: () => {
+      rows = [];
+      nextId = 0;
+    },
   };
-  return { openDatabaseAsync: jest.fn(async () => db) };
+  return { openDatabaseAsync: jest.fn(async () => db), __getDb: () => db };
 });
 
+import * as SQLite from 'expo-sqlite';
 import { saveScan, getScans, deleteScan } from '../scans';
+
+beforeEach(() => {
+  (SQLite as any).__getDb().__reset();
+});
 
 test('saved scans round-trip with geotag nulls', async () => {
   const saved = await saveScan({

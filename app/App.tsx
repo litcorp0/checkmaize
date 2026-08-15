@@ -18,8 +18,15 @@ export type RootStackParamList = {
   Info: { className: ClassName };
 };
 
+export type TabParamList = {
+  Scan: undefined;
+  History: undefined;
+  Contribute: undefined;
+  About: undefined;
+};
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tabs = createBottomTabNavigator();
+const Tabs = createBottomTabNavigator<TabParamList>();
 
 function TabsNavigator() {
   return (

@@ -1,27 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { CameraView } from 'expo-camera';
-import * as Camera from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
+import type { CompositeScreenProps } from '@react-navigation/native';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useClassifier } from '../ml/ModelContext';
 import { saveScan } from '../db/scans';
 import { LOW_CONFIDENCE_THRESHOLD } from '../data/diseases';
-import type { RootStackParamList } from '../../App';
+import type { RootStackParamList, TabParamList } from '../../App';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Tabs'>;
+type Props = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList, 'Scan'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
 export default function CaptureScreen({ navigation }: Props) {
   const cameraRef = useRef<CameraView>(null);
   const { ready, classify } = useClassifier();
-  const [permission, setPermission] = useState<boolean | null>(null);
+  const [permission, requestPermission] = useCameraPermissions();
   const [busy, setBusy] = useState(false);
   const [unclear, setUnclear] = useState(false);
 
   useEffect(() => {
-    Camera.requestCameraPermissionsAsync().then((r) => setPermission(r.granted));
-  }, []);
+    if (permission === null) {
+      requestPermission();
+    }
+  }, [permission, requestPermission]);
 
   const runScan = async (uri: string) => {
     if (!ready) {
@@ -78,10 +84,13 @@ export default function CaptureScreen({ navigation }: Props) {
   if (permission === null) {
     return <View style={styles.center}><Text>Requesting camera permission...</Text></View>;
   }
-  if (permission === false) {
+  if (!permission.granted) {
     return (
       <View style={styles.center}>
         <Text style={styles.title}>Camera access is required</Text>
+        <Pressable style={styles.button} onPress={requestPermission}>
+          <Text style={styles.buttonText}>Grant camera permission</Text>
+        </Pressable>
         <Pressable style={styles.button} onPress={onPick}>
           <Text style={styles.buttonText}>Choose photo from gallery instead</Text>
         </Pressable>

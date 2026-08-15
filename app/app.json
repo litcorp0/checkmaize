@@ -6,13 +6,32 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "plugins": ["expo-dev-client"],
+    "plugins": [
+      "expo-dev-client",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow CheckMaize to access your camera to scan maize leaves"
+        }
+      ],
+      "expo-sqlite",
+      "expo-sharing",
+      "expo-asset"
+    ],
     "ios": {
       "bundleIdentifier": "com.checkmaize.app",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "CheckMaize records the location of your scans to help researchers map disease spread."
+      }
     },
     "android": {
       "package": "com.checkmaize.app",
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",

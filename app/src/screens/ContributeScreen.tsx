@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { File, Paths } from 'expo-file-system';
+import { Directory, File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 export default function ContributeScreen() {
@@ -15,13 +15,14 @@ export default function ContributeScreen() {
     const uri = result.assets[0].uri;
     const source = new File(uri);
     const bytes = await source.bytes();
-    const dir = new File(Paths.document, 'contributions/');
-    if (!(await dir.exists)) {
-      await dir.create({ intermediates: true });
+    const dir = new Directory(Paths.document, 'contributions');
+    if (!dir.exists) {
+      dir.create({ intermediates: true, idempotent: true });
     }
     const name = `contribution_${Date.now()}.jpg`;
     const dest = new File(dir, name);
-    await dest.write(bytes);
+    dest.create({ overwrite: true });
+    dest.write(bytes);
     setLastSaved(dest.uri);
     if (await Sharing.isAvailableAsync()) {
       await Sharing.shareAsync(dest.uri, {

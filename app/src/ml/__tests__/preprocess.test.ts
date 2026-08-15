@@ -1,11 +1,18 @@
 import fs from 'fs';
 import path from 'path';
-import { decode } from 'pngjs';
+import { PNG } from 'pngjs';
 import { rgbaToCHWFloat32 } from '../preprocess';
 import { CONTRACT } from '../contract';
 
 jest.mock('expo-image-manipulator', () => ({
-  manipulateAsync: jest.fn(async () => ({ uri: 'mock.jpg' })),
+  ImageManipulator: {
+    manipulate: jest.fn(() => ({
+      resize: jest.fn(),
+      renderAsync: jest.fn(async () => ({
+        saveAsync: jest.fn(async () => ({ uri: 'mock.jpg' })),
+      })),
+    })),
+  },
   SaveFormat: { JPEG: 'jpeg' },
 }));
 
@@ -17,7 +24,7 @@ test('fixture reference tensor has 32x32x3 values', () => {
 });
 
 test('JS normalization matches the Python reference exactly', () => {
-  const png = decode(fs.readFileSync(path.join(fixtures, 'sample.png')));
+  const png = PNG.sync.read(fs.readFileSync(path.join(fixtures, 'sample.png')));
   const rgba = new Uint8Array(png.data.buffer, png.data.byteOffset, png.data.length);
   const tensor = rgbaToCHWFloat32(rgba, png.width, png.height, CONTRACT.mean, CONTRACT.std);
   const ref = JSON.parse(fs.readFileSync(path.join(fixtures, 'reference_tensor.json'), 'utf8'));

@@ -1,4 +1,4 @@
-This directory holds the shipped model file produced by the Colab notebook
+This directory holds the shipped model files produced by the Colab notebook
 `colab/03_export.ipynb`. After running the notebook and downloading
 `artifacts.zip`, copy these three files into this directory:
 

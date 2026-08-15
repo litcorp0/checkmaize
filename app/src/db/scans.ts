@@ -49,15 +49,23 @@ export async function saveScan(record: ScanRecord): Promise<ScanRecord> {
 
 export async function getScans(): Promise<ScanRecord[]> {
   const db = await initDb();
-  const rows = await db.getAllAsync('SELECT * FROM scans ORDER BY created_at DESC');
+  const rows = await db.getAllAsync<{
+    id: number;
+    created_at: string;
+    image_uri: string;
+    prediction: string;
+    confidence: number;
+    latitude: number | null;
+    longitude: number | null;
+  }>('SELECT * FROM scans ORDER BY created_at DESC');
   return rows.map((r) => ({
-    id: r.id as number,
-    createdAt: r.created_at as string,
-    imageUri: r.image_uri as string,
+    id: r.id,
+    createdAt: r.created_at,
+    imageUri: r.image_uri,
     prediction: r.prediction as ClassName,
-    confidence: r.confidence as number,
-    latitude: r.latitude as number | null,
-    longitude: r.longitude as number | null,
+    confidence: r.confidence,
+    latitude: r.latitude,
+    longitude: r.longitude,
   }));
 }
 

@@ -1,6 +1,13 @@
 import type { InferenceSession } from 'onnxruntime-react-native';
 import { MaizeClassifier } from '../onnx';
 
+jest.mock('onnxruntime-react-native', () => ({
+  InferenceSession: { create: jest.fn() },
+  Tensor: jest.fn(function (type: string, data: Float32Array, shape: number[]) {
+    return { type, data, dims: shape };
+  }),
+}));
+
 jest.mock('expo-asset', () => ({
   Asset: {
     fromModule: jest.fn(() => ({

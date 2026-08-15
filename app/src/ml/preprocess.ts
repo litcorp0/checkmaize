@@ -1,4 +1,4 @@
-import * as ImageManipulator from 'expo-image-manipulator';
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { decode as decodeJpeg } from 'jpeg-js';
 import { CONTRACT } from './contract';
 
@@ -20,11 +20,10 @@ export function rgbaToCHWFloat32(
 }
 
 export async function resizeToContract(uri: string): Promise<string> {
-  const result = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { width: CONTRACT.size, height: CONTRACT.size } }],
-    { format: ImageManipulator.SaveFormat.JPEG, compress: 1 }
-  );
+  const context = ImageManipulator.manipulate(uri);
+  context.resize({ width: CONTRACT.size, height: CONTRACT.size });
+  const rendered = await context.renderAsync();
+  const result = await rendered.saveAsync({ format: SaveFormat.JPEG, compress: 1 });
   return result.uri;
 }
 
