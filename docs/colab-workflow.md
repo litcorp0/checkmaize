@@ -52,6 +52,8 @@ browser's Downloads folder.
 
 ## Gotchas
 
+- The GitHub repo must be **public** — the cloud runtime has no GitHub
+  credentials and cannot clone private repos.
 - Cloud runtimes are ephemeral: raw data must be re-downloaded/re-uploaded
   each session (the repo itself persists on GitHub / can be re-dragged in).
 - If the runtime drops mid-training, reconnect, re-run Cell 1, then re-run the
