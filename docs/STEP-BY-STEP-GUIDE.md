@@ -40,7 +40,7 @@ into the app → build the app → install it on a phone.**
 - A free Google account (for Colab)
 - A free GitHub account (so Colab can read your project code)
 - An Android phone (Android 7 or newer) with a USB cable
-- A free Mendeley account (to download the Ghana dataset) — optional fallback explained later
+- A free Kaggle account (Google login — to download the Ghana dataset)
 
 ---
 
@@ -86,7 +86,7 @@ This step gathers ~6,500 maize leaf pictures:
   automatically by the notebook from the Hugging Face website.
 - **CCMT Ghana dataset** (~2,500 pictures of maize photographed on real farms
   in Ghana by researchers at the University of Energy and Natural Resources,
-  Sunyani) — you download this yourself from the Mendeley website.
+  Sunyani) — you download this yourself from the Kaggle website (free account).
 
 Then the notebook sorts them into "training pictures", "checking pictures", and
 "exam pictures" — the model learns from the training pictures and is graded on
@@ -94,16 +94,26 @@ the exam pictures it has never seen.
 
 ### Step 1.1 — Download the Ghana dataset to your computer
 
-1. In your browser go to:
-   <https://data.mendeley.com/datasets/bwh3zbpkpv/1>
-2. If Mendeley asks you to sign in, create a free account (or use Google login).
-3. Find the download button for **"Raw Data.zip"** (about 1.2 GB) and download
-   it to your computer (e.g. your Downloads folder). **Remember where it went.**
+The Ghana dataset is the "CCMT" collection: maize leaves photographed on real
+farms around Sunyani, Ghana, by the University of Energy and Natural Resources,
+and checked by plant experts.
 
-> If the download page does not offer a direct download, or the file is too big
-> for your connection: tell the researcher. There is a fallback plan (any
-> Ghana-sourced maize leaf photos labelled `Leaf blight`, `Leaf spot`,
-> `Healthy` in folders work the same way).
+**Easiest route — Kaggle (recommended):**
+
+1. In your browser go to:
+   <https://www.kaggle.com/datasets/nirmalsankalana/crop-pest-and-disease-detection>
+   (This is the same dataset; its own description cites the original Mendeley
+   DOI `10.17632/bwh3zbpkpv.1` as the source.)
+2. If Kaggle asks you to sign in, use your Google account (free).
+3. Click the **Download** button (top-right of the dataset page).
+4. Save the file `crop-pest-and-disease-detection.zip` (~1.3 GB) in your
+   **Downloads** folder. **Remember where it went.**
+
+> **Fallback route — Mendeley (only if Kaggle is unavailable):** go to
+> <https://data.mendeley.com/datasets/bwh3zbpkpv/1>, sign in (Google works),
+> and use "Download All Files" (about 8 GB — it includes an extra augmented
+> copy we don't need, so prefer Kaggle). If you use this route, rename the
+> downloaded file to `Raw Data.zip`.
 
 ### Step 1.2 — Open the notebook in Colab
 
@@ -143,25 +153,25 @@ plantvillage extraction done
 ### Step 1.5 — Upload the Ghana dataset and run Cell 3
 
 1. In the left sidebar, click the **folder icon**.
-2. Use the **upload (⤒)** button to upload `Raw Data.zip` from your computer.
-   (Large file — be patient, the progress bar appears bottom-left of Colab.)
-3. Press ▶ on Cell 3.
+2. Use the **upload (⤒)** button to upload the dataset zip from your computer
+   (`crop-pest-and-disease-detection.zip` from Kaggle, or `Raw Data.zip` from
+   Mendeley). (Large file — be patient, the progress bar appears bottom-left
+   of Colab.)
+3. Press ▶ on Cell 3. The notebook accepts both layouts automatically and
+   keeps only the three classes we need.
 
-Expected result — a list like:
+Expected result — three lines (numbers should match exactly):
 
 ```
-Fall armyworm    285
-Grasshopper      673
-Healthy          208
-Leaf beetle      948
-Leaf blight      1006
-Leaf spot        1259
-Streak virus     1010
+Using: crop-pest-and-disease-detection.zip
+leaf blight 1006
+leaf spot 1259
+healthy 208
+ccmt_ghana ready: {'Leaf blight': 1006, 'Leaf spot': 1259, 'Healthy': 208}
 ```
 
-(If you see `No /content/Raw Data.zip found` — the upload was not finished or
-the file name is different. Rename your file to exactly `Raw Data.zip` and
-re-run the cell.)
+(If you see `No dataset zip found in /content` — the upload was not finished.
+Wait for the progress bar to complete, then re-run the cell.)
 
 ### Step 1.6 — Run Cell 4 (build the splits + run the tests)
 
@@ -521,7 +531,7 @@ If EAS is not available to you:
 | Notebook 02 Cell 2 cannot find `data/raw/...` | Colab forgets downloads between notebooks. Re-run Notebook 01 Cells 2 and 3, then continue. |
 | `torch.cuda.is_available()` prints `False` | You forgot Runtime → Change runtime type → T4 GPU. Change it and re-run from Cell 1. |
 | Colab disconnects mid-training | Re-open the notebook, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. |
-| Mendeley download requires login | Create a free Mendeley account, sign in, then download `Raw Data.zip`. |
+| Kaggle download requires login | Sign in to Kaggle with your Google account, then click Download on the dataset page. |
 | `files.download` doesn't start | Allow pop-ups/downloads for colab.research.google.com in the browser. |
 | App crashes at startup with `Cannot read property 'install' of null` | The onnxruntime fix did not run. In the `app` folder run `node scripts/fix-onnxruntime.js`, then `npx expo run:android` again. |
 | `npm test` fails on the parity test after replacing fixtures | The fixture replacement didn't match (wrong files, or you replaced with files from a different model run). Re-download `fixtures.zip` from Notebook 03 and replace again. |

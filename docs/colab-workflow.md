@@ -5,8 +5,10 @@ All Python runs on Google Colab (free). The repo is the source of truth; noteboo
 ## Prerequisites per session
 
 - Push the repo to GitHub (or upload a zip to `/content/checkmaize.zip`).
-- Notebook 01: download PlantVillage via HF (auto), upload `Raw Data.zip` (CCMT,
-  Mendeley DOI 10.17632/bwh3zbpkpv.1) via the files pane.
+- Notebook 01: download PlantVillage via HF (auto), upload the CCMT Ghana zip
+  (`crop-pest-and-disease-detection.zip` from the Kaggle mirror, or
+  `Raw Data.zip` from Mendeley DOI 10.17632/bwh3zbpkpv.1) via the files pane.
+  The notebook accepts both layouts automatically.
 - Notebook 03: set the `winner` variable to the model chosen from the Task 8 table.
 
 ## Notebooks

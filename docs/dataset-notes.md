@@ -31,3 +31,7 @@ test imagery. Local collection (app Contribute flow) is the planned path to clos
 - PlantVillage: Mohanty et al. (2016), Frontiers in Plant Science.
 - CCMT: "Dataset for crop pest and disease detection", Mendeley Data v1, 2023,
   DOI 10.17632/bwh3zbpkpv.1.
+- Kaggle mirror used for acquisition: `nirmalsankalana/crop-pest-and-disease-detection`
+  (same images, raw-only archive, ~1.3 GB; its description cites the Mendeley
+  DOI above as source). Folder names in the mirror are flattened
+  (`Maize leaf blight/...`), handled by Notebook 01 Cell 3.
