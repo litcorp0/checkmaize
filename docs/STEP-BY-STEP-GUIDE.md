@@ -36,11 +36,15 @@ into the app → build the app → install it on a phone.**
 **Time needed:** about 4–6 hours total, mostly waiting for downloads and training.
 
 **What you need:**
-- A computer with internet and Chrome/Firefox
-- A free Google account (for Colab)
-- A free GitHub account (so Colab can read your project code)
+- VS Code with the official **Colab extension** (recommended way to run the
+  notebooks — installed from the VS Code Extensions marketplace: search
+  "Colab" and pick the one by Google)
+- A free Google account (to sign into the Colab extension)
+- A free GitHub account (so the cloud runtime can read your project code)
 - An Android phone (Android 7 or newer) with a USB cable
 - A free Kaggle account (Google login — to download the Ghana dataset)
+- (Optional, fallback only) a browser — Chrome or Firefox — to run the
+  notebooks at colab.research.google.com instead of VS Code
 
 ---
 
@@ -76,6 +80,31 @@ a project from GitHub. So we first upload the project to GitHub.
 > use the "upload a zip" option shown in Cell 1 instead. Zip the whole
 > `checkmaize` folder (right-click → Compress), upload it in the Colab files
 > pane, and follow the OPTION B instructions printed by the notebook.
+
+---
+
+## Part 0.5 — Connect Colab to VS Code (one-time setup, ~10 minutes)
+
+You don't need the Colab website. The official **Colab extension for VS Code**
+runs the notebooks on Google's cloud computers (with the free GPU) while you
+type and run them from VS Code.
+
+1. In VS Code, open the **Extensions** view (the four-squares icon in the left
+   toolbar, or press `Ctrl+Shift+X`).
+2. Search for **Colab** and install the extension published by **Google**
+   (its ID is `google.colab`).
+3. Click the new **Colab icon** that appears in the left toolbar.
+4. Click **Sign in** and use your Google account.
+5. Click **Connect to a Colab runtime**. When asked which runtime, choose
+   **T4 GPU** (free) — this makes training ~50x faster than your laptop.
+6. Once connected, the extension's **file explorer** shows the cloud
+   computer's file system (its `/content` folder). Files you drag INTO the
+   explorer are uploaded to the cloud; files you drag OUT are downloaded to
+   your computer.
+
+> The cloud computer is temporary: Google wipes it when you disconnect or it
+> times out. Anything important must be dragged back to your computer (the
+> notebooks do this for you at the end of each part).
 
 ---
 
@@ -115,28 +144,38 @@ and checked by plant experts.
 > copy we don't need, so prefer Kaggle). If you use this route, rename the
 > downloaded file to `Raw Data.zip`.
 
-### Step 1.2 — Open the notebook in Colab
+### Step 1.2 — Open the notebook in VS Code
 
-1. Go to <https://colab.research.google.com> and sign in with your Google account.
-2. Menu: **File → Upload notebook**.
-3. Click **Browse**, find the file `colab/01_dataset.ipynb` inside your project
-   folder, and open it.
-4. The notebook opens as a list of grey boxes ("cells"). You run them one by
-   one with the **play button (▶)** on the left of each cell. **Wait for each
-   cell to finish before running the next one.**
+1. In VS Code open the `checkmaize` project folder
+   (**File → Open Folder**, choose `checkmaize`).
+2. In the file list on the left, find `colab/01_dataset.ipynb` and click it.
+3. The notebook opens as a list of grey boxes ("cells"). Make sure the Colab
+   extension is connected (Colab icon → connected to a runtime).
+4. You run cells one by one with the **play button (▶)** on the left of each
+   cell (or `Shift+Enter`). **Wait for each cell to finish before running the
+   next one.**
+
+> **Browser fallback:** open <https://colab.research.google.com>, menu
+> **File → Upload notebook**, choose the same file. Everything below works the
+> same, except uploads use the left-side folder pane and downloads go to your
+> browser's Downloads folder.
 
 ### Step 1.3 — Run Cell 1 (connect to your code)
 
-Press ▶ on Cell 1.
+Press ▶ on Cell 1. It checks where your project code is and installs any
+missing tools.
 
-- If you pushed the repo to GitHub (Part 0), this cell prints instructions.
-  Copy the `git clone` line it shows, paste it into a **new cell** (button
-  **+ Code**), and run it. Then run the `pip install` line it shows.
-- If you did not push to GitHub: in the left sidebar click the **folder icon**,
-  then the **upload icon (⤒)**, upload `checkmaize.zip`, and run the OPTION B
-  commands the cell prints.
+- If the cell prints `Cloud runtime detected, but the repo is not on it yet`:
+  drag the whole `checkmaize` folder from your computer into the Colab
+  extension's **file explorer** (wait for it to finish — it's a lot of small
+  files), or, if you pushed to GitHub (Part 0), run in a new cell:
+  `!git clone <your-repo-url> /content/checkmaize`. Then re-run Cell 1.
+- Otherwise it prints `Working in: ...` and `dependencies OK` — good.
 
 Expected result: no red error text. (Red = problem; see Troubleshooting.)
+
+> When the runtime wipes (new session), re-run Cell 1 first — it restores the
+> repo by `git pull` if the folder is still there, or tells you to re-upload.
 
 ### Step 1.4 — Run Cell 2 (download PlantVillage, automatic)
 
@@ -152,13 +191,12 @@ plantvillage extraction done
 
 ### Step 1.5 — Upload the Ghana dataset and run Cell 3
 
-1. In the left sidebar, click the **folder icon**.
-2. Use the **upload (⤒)** button to upload the dataset zip from your computer
-   (`crop-pest-and-disease-detection.zip` from Kaggle, or `Raw Data.zip` from
-   Mendeley). (Large file — be patient, the progress bar appears bottom-left
-   of Colab.)
-3. Press ▶ on Cell 3. The notebook accepts both layouts automatically and
-   keeps only the three classes we need.
+1. In VS Code, drag the dataset zip (`crop-pest-and-disease-detection.zip` from
+   Kaggle, or `Raw Data.zip` from Mendeley) from your computer's file manager
+   into the **Colab extension's file explorer**. (Large file — be patient; the
+   upload progress shows in VS Code's status bar.)
+2. Press ▶ on Cell 3. The notebook accepts both dataset layouts automatically
+   and keeps only the three classes we need.
 
 Expected result — three lines (numbers should match exactly):
 
@@ -200,10 +238,13 @@ The important part: **all tests say `passed`**, and **nothing is red**.
 > exam. The tests prove that no exam picture was leaked into the learning set —
 > that would be like giving a student the answers before the exam.
 
-### Step 1.7 — Run Cell 5 (download the result)
+### Step 1.7 — Run Cell 5 (get the result onto your computer)
 
-Press ▶ on Cell 5. It zips the six list files and downloads `splits.zip` to
-your computer's Downloads folder.
+Press ▶ on Cell 5. It zips the six list files into `splits.zip`.
+
+- **VS Code:** the cell prints where the file is (`/content/splits.zip`). Drag
+  it from the Colab extension's file explorer onto your computer.
+- **Browser Colab:** the download starts automatically to your Downloads folder.
 
 ### Step 1.8 — Put the lists into your project
 
@@ -228,23 +269,28 @@ This step teaches **five different candidate brains** on the same pictures
 habits), then shows you a scoreboard so we can pick the best student for the
 phone. Two are small and fast (good for phones), the others are heavier.
 
-### Step 2.1 — Turn on the free GPU
+### Step 2.1 — Make sure you are on the free GPU runtime
 
-1. Open `colab/02_train_benchmark.ipynb` in Colab (Upload notebook, same as
-   before).
-2. **Important:** Menu: **Runtime → Change runtime type → Hardware accelerator
-   → T4 GPU → Save.** Without the GPU, training takes days instead of hours.
+1. Open `colab/02_train_benchmark.ipynb` in VS Code (same as Step 1.2).
+2. **Important:** click the **Colab icon** in the left toolbar and check you are
+   connected to a **T4 GPU** runtime (the runtime name shows next to the
+   connection). If not: disconnect, click **Connect to a Colab runtime** again,
+   and choose **T4 GPU**. Without the GPU, training takes days instead of hours.
+
+> **Browser fallback:** Menu **Runtime → Change runtime type → Hardware
+> accelerator → T4 GPU → Save**.
 
 ### Step 2.2 — Run Cell 1 (connect + check the GPU)
 
-Run Cell 1 (same options as Notebook 01). Then in a new cell run:
+Run Cell 1 (same options as Notebook 01). It now prints the GPU check itself:
 
-```python
-import torch
-print(torch.cuda.is_available())
+```
+torch: 2.x.x | GPU available: True
 ```
 
-Expected: `True`. If it prints `False`, you forgot Step 2.1.
+Expected: `True`. If it prints `False` (or a warning), you connected to a CPU
+runtime — disconnect in the Colab extension and reconnect choosing **T4 GPU**
+(see Step 2.1), then re-run Cell 1.
 
 ### Step 2.3 — Run Cell 2 (quick self-test of the code)
 
@@ -256,11 +302,11 @@ everything when a notebook closes. If Cell 2 complains it cannot find
 
 ### Step 2.4 — Run Cell 3 (the big training run)
 
-Run Cell 3. **This is the long one — 2 to 3 hours.** Colab may disconnect if
-you leave the tab; keep the tab open in the foreground if you can. If it stops,
-just re-run the cell — finished models are saved and skipped... (no — each
-model trains from scratch; if it stops mid-model, re-run the cell and it starts
-that model over).
+Run Cell 3. **This is the long one — 2 to 3 hours.** The cloud runtime may
+disconnect if you stay idle; keep VS Code open and connected, and click in the
+notebook occasionally. If it stops, reconnect, re-run Cell 1, then re-run Cell
+3 — finished models are skipped... (no — each model trains from scratch; if it
+stops mid-model, re-running the cell restarts that model).
 
 While it runs you will see lines like:
 
@@ -298,10 +344,15 @@ reasonable for a phone (roughly under 20 MB). Usually `efficientnet_b0` wins,
 or `mobilenet_v3_small` if you want a lighter app. **Write down the winner's
 name** (e.g. `efficientnet_b0`) — you will type it in Part 3.
 
-### Step 2.6 — Run Cell 4 (download the scoreboard + the trained brains)
+### Step 2.6 — Run Cell 4 (get the scoreboard + the trained brains)
 
-Run Cell 4. It downloads `report.zip` and `runs.zip` to your computer.
+Run Cell 4. It zips `report.zip` and `runs.zip` into `/content`.
 
+- **VS Code:** drag both zips from the Colab extension's file explorer onto
+  your computer.
+- **Browser Colab:** the downloads start automatically.
+
+Then:
 - Unzip `report.zip` into `checkmaize/benchmarks/report/`.
 - Unzip `runs.zip` into `checkmaize/artifacts/runs/`.
 - Commit (GitHub users):
@@ -323,11 +374,13 @@ the exam, and produces the exact files the app needs.
 
 ### Step 3.1 — Open Notebook 03
 
-Upload `colab/03_export.ipynb` to Colab and open it.
+In VS Code open `colab/03_export.ipynb` from the project folder (same as
+Step 1.2). Make sure the Colab runtime is connected.
 
 ### Step 3.2 — Run Cell 1 (connect + install the small tools)
 
-Same as before — connect to the repo (or upload the zip), install.
+Same as before — it finds the repo, installs anything missing, and prints the
+`torch` version. No red text expected.
 
 ### Step 3.3 — Run Cell 2 (tell it which model won)
 
@@ -364,12 +417,16 @@ Run Cell 4. It writes two small files (`labels.json` = the list of diseases in
 order, `metrics.json` = the scoreboard row of the winner). Expected: a printed
 JSON block with `model`, `test_accuracy`, etc.
 
-### Step 3.6 — Run Cell 5 (download everything)
+### Step 3.6 — Run Cell 5 (get everything onto your computer)
 
-Run Cell 5. It downloads:
+Run Cell 5. It produces:
 - `artifacts.zip` — contains `model_int8.onnx` (the squeezed brain), `labels.json`, `metrics.json`
 - `fixtures.zip` — the parity-test pictures the app uses to double-check its math
 - `onnx-contract.md` — the technical agreement between Python and the app
+
+- **VS Code:** the cell prints where the zips are. Drag them from the Colab
+  extension's file explorer onto your computer.
+- **Browser Colab:** the downloads start automatically.
 
 ### Step 3.7 — Copy the files into the project
 
@@ -528,15 +585,17 @@ If EAS is not available to you:
 | Problem | Fix |
 |---|---|
 | Colab says `No module named 'data'` or `ModuleNotFoundError` | You ran a cell before connecting to the repo. Run Cell 1 first; it must succeed without red text. |
-| Notebook 02 Cell 2 cannot find `data/raw/...` | Colab forgets downloads between notebooks. Re-run Notebook 01 Cells 2 and 3, then continue. |
-| `torch.cuda.is_available()` prints `False` | You forgot Runtime → Change runtime type → T4 GPU. Change it and re-run from Cell 1. |
-| Colab disconnects mid-training | Re-open the notebook, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. |
+| Cell 1 prints `Cloud runtime detected, but the repo is not on it yet` | Drag the `checkmaize` folder into the Colab extension's file explorer (or `!git clone <your-repo-url> /content/checkmaize`), then re-run Cell 1. |
+| Notebook 02 Cell 2 cannot find `data/raw/...` | The cloud computer forgets downloads between notebooks. Re-run Notebook 01 Cells 2 and 3, then continue. |
+| Cell 1 prints `GPU available: False` | In VS Code: Colab icon → disconnect → connect again choosing **T4 GPU**. Browser: Runtime → Change runtime type → T4 GPU. Then re-run Cell 1. |
+| Runtime disconnects mid-training | Reconnect, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. |
 | Kaggle download requires login | Sign in to Kaggle with your Google account, then click Download on the dataset page. |
-| `files.download` doesn't start | Allow pop-ups/downloads for colab.research.google.com in the browser. |
+| The VS Code cell says the zip is at `/content/...` but I can't see it | Open the Colab extension's file explorer (Colab icon → the file tree view) and navigate to `/content`. |
+| Dragging the dataset zip into the file explorer does nothing | The upload can take many minutes for ~1.3 GB. Watch VS Code's status bar; when the progress disappears, re-run Cell 3. |
 | App crashes at startup with `Cannot read property 'install' of null` | The onnxruntime fix did not run. In the `app` folder run `node scripts/fix-onnxruntime.js`, then `npx expo run:android` again. |
 | `npm test` fails on the parity test after replacing fixtures | The fixture replacement didn't match (wrong files, or you replaced with files from a different model run). Re-download `fixtures.zip` from Notebook 03 and replace again. |
 | Phone won't install the APK | Android blocks unknown sources. When prompted, allow "Install unknown apps" for the browser you downloaded from. |
-| Everything is slow on your computer | That's expected — all heavy work happens in Colab. Your computer only moves small files around. |
+| Everything is slow on your computer | That's expected — all heavy work happens on the cloud runtime. Your computer only moves small files around. |
 
 ---
 
