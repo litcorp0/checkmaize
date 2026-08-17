@@ -84,13 +84,7 @@ a project from GitHub. So we first upload the project to GitHub.
 > **If you created the repo as Private earlier:** the cloud computer will not
 > be able to download it. Change it to Public (GitHub → the repo → **Settings
 > → General → Danger Zone → Change repository visibility → Make public**),
-> then run the `git clone` line below in a notebook cell:
->
-> ```
-> !git clone https://github.com/YOUR-USERNAME/checkmaize.git /content/checkmaize
-> ```
->
-> and re-run Cell 1.
+> then re-run Cell 1 — it clones the repo automatically now.
 
 > **No terminal on your computer?** Skip Part 0. In every Colab notebook below,
 > use the "upload a zip" option shown in Cell 1 instead. Zip the whole
@@ -181,11 +175,10 @@ and checked by plant experts.
 Press ▶ on Cell 1. It checks where your project code is and installs any
 missing tools.
 
-- If the cell prints `Cloud runtime detected, but the repo is not on it yet`:
-  drag the whole `checkmaize` folder from your computer into the Colab
-  extension's **file explorer** (wait for it to finish — it's a lot of small
-  files), or, if you pushed to GitHub (Part 0), run in a new cell:
-  `!git clone <your-repo-url> /content/checkmaize`. Then re-run Cell 1.
+- If the cell prints `Repo not on this runtime yet. Cloning from GitHub...`:
+  it downloads the project itself — wait a few seconds.
+- If it prints `Automatic clone failed`: the repo is still **Private** on
+  GitHub (make it Public) or the runtime has no internet. Fix and re-run Cell 1.
 - Otherwise it prints `Working in: ...` and `dependencies OK` — good.
 
 Expected result: no red error text. (Red = problem; see Troubleshooting.)
@@ -601,8 +594,7 @@ If EAS is not available to you:
 | Problem | Fix |
 |---|---|
 | Colab says `No module named 'data'` or `ModuleNotFoundError` | You ran a cell before connecting to the repo. Run Cell 1 first; it must succeed without red text. |
-| Cell 1 prints `Cloud runtime detected, but the repo is not on it yet` | Drag the `checkmaize` folder into the Colab extension's file explorer, or if you pushed to GitHub run `!git clone <your-repo-url> /content/checkmaize` in a new cell. Then re-run Cell 1. |
-| `git clone` says it can't find the repo or asks for a username | Your GitHub repo is still **Private**. Make it Public (Settings → General → Danger Zone → Change visibility), then clone again. |
+| Cell 1 prints `Automatic clone failed` | Your GitHub repo is still **Private** (make it Public: Settings → General → Danger Zone → Change visibility) or the runtime has no internet. Fix, then re-run Cell 1. |
 | Notebook 02 Cell 2 cannot find `data/raw/...` | The cloud computer forgets downloads between notebooks. Re-run Notebook 01 Cells 2 and 3, then continue. |
 | Cell 1 prints `GPU available: False` | In VS Code: Colab icon → disconnect → connect again choosing **T4 GPU**. Browser: Runtime → Change runtime type → T4 GPU. Then re-run Cell 1. |
 | Runtime disconnects mid-training | Reconnect, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. |
