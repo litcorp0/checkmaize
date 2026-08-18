@@ -274,8 +274,9 @@ Press ▶ on Cell 5. It zips the six list files into `splits.zip`.
 ### Step 1.8 — Put the lists into your project
 
 1. Unzip `splits.zip` (right-click → Extract All).
-2. Inside it is a folder `manifests` with files like `train.csv`, `test.csv`.
-   Copy **all of them** into your project folder: `checkmaize/data/manifests/`.
+2. Inside are six CSV files (`train.csv`, `test.csv`, `val.csv`,
+   `domain_shift_*.csv`). Copy **all of them** into your project folder:
+   `checkmaize/data/manifests/` (create that folder if it does not exist).
 3. Commit them so Colab can see them later (only if you used GitHub):
    in a terminal inside the project folder run:
 

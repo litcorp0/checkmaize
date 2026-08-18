@@ -41,6 +41,7 @@ def build_raw_manifest(raw_root: Path, out_csv: Path) -> list[dict]:
                 )
     if not rows:
         raise ValueError(f"no images found under {raw_root}; expected data/raw/<source>/<class_folder>")
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
     with out_csv.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["path", "source", "leaf_id", "class"])
         writer.writeheader()

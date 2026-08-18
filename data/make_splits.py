@@ -47,6 +47,7 @@ def build_splits(raw_csv: Path, out_dir: Path, seed: int, ghana_test_ratio: floa
     pv = [r for r in rows if r["source"] == "plantvillage"]
     if not ghana:
         raise ValueError("no ccmt_ghana rows found; Ghana test set cannot be built")
+    out_dir.mkdir(parents=True, exist_ok=True)
     g_test, g_val, g_train = _split_groups(
         list(_group_by_leaf(ghana).values()), rng, [ghana_test_ratio, val_ratio, 1.0 - ghana_test_ratio - val_ratio]
     )
