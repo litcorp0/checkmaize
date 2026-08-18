@@ -145,8 +145,9 @@ and checked by plant experts.
    DOI `10.17632/bwh3zbpkpv.1` as the source.)
 2. If Kaggle asks you to sign in, use your Google account (free).
 3. Click the **Download** button (top-right of the dataset page).
-4. Save the file `crop-pest-and-disease-detection.zip` (~1.3 GB) in your
-   **Downloads** folder. **Remember where it went.**
+4. Save the file (~1.3 GB) in your **Downloads** folder — it may be called
+   `crop-pest-and-disease-detection.zip` or just `archive.zip`; both are fine.
+   **Remember where it went.**
 
 > **Fallback route — Mendeley (only if Kaggle is unavailable):** go to
 > <https://data.mendeley.com/datasets/bwh3zbpkpv/1>, sign in (Google works),
@@ -201,27 +202,43 @@ plantvillage extraction done: 3852 maize images copied (0 missing)
 (The cell downloads the color-image train+test lists directly from Hugging
 Face — no `datasets` library involved, which avoids version problems.)
 
-### Step 1.5 — Upload the Ghana dataset and run Cell 3
+### Step 1.5 — Get the Ghana dataset onto the cloud and run Cell 3
 
-1. In VS Code, drag the dataset zip (`crop-pest-and-disease-detection.zip` from
-   Kaggle, or `Raw Data.zip` from Mendeley) from your computer's file manager
-   into the **Colab extension's file explorer**. (Large file — be patient; the
-   upload progress shows in VS Code's status bar.)
-2. Press ▶ on Cell 3. The notebook accepts both dataset layouts automatically
-   and keeps only the three classes we need.
+Cell 3 has two ways to get the dataset onto the cloud machine. **Try OPTION A
+first.**
+
+**OPTION A (easiest — pick the file from your computer):**
+
+1. Press ▶ on Cell 3. It shows a file-picker button — click it and choose the
+   zip you downloaded in Step 1.1 (`archive.zip` or
+   `crop-pest-and-disease-detection.zip`).
+2. Wait for the upload bar to finish, then the rest of the cell runs by
+   itself (extraction takes a few minutes).
+3. If no file-picker appears (or it shows an error): press the stop button on
+   the cell and use OPTION B.
+
+**OPTION B (the cloud downloads it directly from Kaggle — nothing to upload):**
+
+1. On kaggle.com click your avatar → **Settings → API → Create New Token**.
+   A file called `kaggle.json` downloads — open it in any text editor.
+2. In Cell 3, find the OPTION B block. Paste the two values into the
+   `KAGGLE_USERNAME` and `KAGGLE_KEY` lines, then delete the `#` at the start
+   of those six lines.
+3. Press ▶ on Cell 3. It downloads and extracts ~1.3 GB on the cloud machine
+   (fast — no upload needed), then builds the dataset.
 
 Expected result — three lines (numbers should match exactly):
 
 ```
-Using: crop-pest-and-disease-detection.zip
+Using: archive.zip (or crop-pest-and-disease-detection.zip)
 leaf blight 1006
 leaf spot 1259
 healthy 208
 ccmt_ghana ready: {'Leaf blight': 1006, 'Leaf spot': 1259, 'Healthy': 208}
 ```
 
-(If you see `No dataset zip found in /content` — the upload was not finished.
-Wait for the progress bar to complete, then re-run the cell.)
+(If you see `No Ghana dataset found on the cloud machine yet` — the upload
+was not finished or OPTION B did not run. Re-check the cell and re-run it.)
 
 ### Step 1.6 — Run Cell 4 (build the splits + run the tests)
 
