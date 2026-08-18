@@ -595,6 +595,7 @@ If EAS is not available to you:
 |---|---|
 | Colab says `No module named 'data'` or `ModuleNotFoundError` | You ran a cell before connecting to the repo. Run Cell 1 first; it must succeed without red text. |
 | Cell 1 prints `Automatic clone failed` | Your GitHub repo is still **Private** (make it Public: Settings → General → Danger Zone → Change visibility) or the runtime has no internet. Fix, then re-run Cell 1. |
+| `NameError: name 'REPO' is not defined` | You skipped Cell 1 or the kernel restarted. Just run Cell 1 once, then re-run your cell — the other cells now find the repo by themselves. |
 | Notebook 02 Cell 2 cannot find `data/raw/...` | The cloud computer forgets downloads between notebooks. Re-run Notebook 01 Cells 2 and 3, then continue. |
 | Cell 1 prints `GPU available: False` | In VS Code: Colab icon → disconnect → connect again choosing **T4 GPU**. Browser: Runtime → Change runtime type → T4 GPU. Then re-run Cell 1. |
 | Runtime disconnects mid-training | Reconnect, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. |
