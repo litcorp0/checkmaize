@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from training.data import ManifestDataset, CLASSES, eval_transforms
+from training.data import ManifestDataset, CLASSES, MEAN, STD, eval_transforms
 
 def _make_csv(tmp: Path, n: int = 8) -> Path:
     raw = tmp / "img"
@@ -41,4 +41,7 @@ def test_eval_transforms_match_contract():
     img = Image.fromarray(np.full((300, 400, 3), 128, dtype=np.uint8))
     x = eval_transforms()(img)
     assert tuple(x.shape) == (3, 224, 224)
-    assert torch.allclose(x, torch.tensor((128 / 255 - 0.485) / 0.229).expand_as(x), atol=1e-5)
+    means = torch.tensor(MEAN).view(3, 1, 1)
+    stds = torch.tensor(STD).view(3, 1, 1)
+    expected = (128 / 255 - means) / stds
+    assert torch.allclose(x, expected.expand_as(x), atol=1e-5)

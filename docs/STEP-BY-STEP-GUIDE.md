@@ -647,6 +647,7 @@ If EAS is not available to you:
 | Cell 1 prints `GPU available: False` | In VS Code: Colab icon → disconnect → connect again choosing **T4 GPU**. Browser: Runtime → Change runtime type → T4 GPU. Then re-run Cell 1. |
 | Runtime disconnects mid-training | Reconnect, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. In the browser all-in-one notebook: re-run Cells 1–5, then Cell 7 — finished models are restored from Google Drive and skipped. |
 | `git pull` fails with `untracked working tree files would be overwritten` | The notebooks now clean `data/manifests` automatically before pulling. If you still see it, run a new cell: `!cd /content/checkmaize && git clean -fdq data/manifests && git pull` and re-run the failed cell. |
+| Cell 5 (smoke tests) fails with `FileNotFoundError` | The notebooks were updated to fix this. Re-run Cell 1 (git pull), then Cell 4 (rebuild the lists), then Cell 5. |
 | Kaggle download requires login | Sign in to Kaggle with your Google account, then click Download on the dataset page. |
 | The VS Code cell says the zip is at `/content/...` but I can't see it | Open the Colab extension's file explorer (Colab icon → the file tree view) and navigate to `/content`. |
 | Dragging the dataset zip into the file explorer does nothing | The upload can take many minutes for ~1.3 GB. Watch VS Code's status bar; when the progress disappears, re-run Cell 3. |

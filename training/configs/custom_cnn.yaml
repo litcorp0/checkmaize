@@ -4,7 +4,7 @@ batch_size: 32
 lr: 0.003
 weight_decay: 0.0
 data_root: data
-train_manifest: train.csv
-val_manifest: val.csv
-test_manifest: test.csv
+train_manifest: manifests/train.csv
+val_manifest: manifests/val.csv
+test_manifest: manifests/test.csv
 seed: 42

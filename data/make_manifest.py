@@ -33,7 +33,10 @@ def build_raw_manifest(raw_root: Path, out_csv: Path) -> list[dict]:
                 leaf_id = img.name.split("__")[0] if source == "plantvillage" else img.stem
                 rows.append(
                     {
-                        "path": str(img.relative_to(raw_root)),
+                        # Relative to the folder CONTAINING the raw root, so
+                        # paths start with "raw/". Training resolves them from
+                        # data_root="data" (see training configs).
+                        "path": str(img.relative_to(raw_root.parent)),
                         "source": source,
                         "leaf_id": leaf_id,
                         "class": class_name,
