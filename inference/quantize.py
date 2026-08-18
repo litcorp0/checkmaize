@@ -9,6 +9,7 @@ from onnxruntime.quantization import QuantType, quantize_dynamic
 
 def quantize(fp32_path: Path, out_path: Path) -> None:
     model = onnx.load(str(fp32_path))
+    model.graph.value_info.clear()
     model = shape_inference.infer_shapes(model, check_type=False, strict_mode=False)
     with tempfile.TemporaryDirectory() as td:
         clean = Path(td) / "model_clean.onnx"
