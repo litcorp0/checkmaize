@@ -193,10 +193,13 @@ Press ▶ on Cell 2. This downloads ~2 GB of images. **Expect 10–30 minutes.**
 Expected result, at the bottom of the cell:
 
 ```
-train: 4000 corn rows (approximately)
-test: 1000 corn rows (approximately)
-plantvillage extraction done
+downloading data.zip (~2 GB, 10-30 minutes)...
+downloaded: /root/.cache/huggingface/hub/...
+plantvillage extraction done: 3852 maize images copied (0 missing)
 ```
+
+(The cell downloads the color-image train+test lists directly from Hugging
+Face — no `datasets` library involved, which avoids version problems.)
 
 ### Step 1.5 — Upload the Ghana dataset and run Cell 3
 
