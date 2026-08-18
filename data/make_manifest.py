@@ -2,6 +2,8 @@ import argparse
 import csv
 from pathlib import Path
 
+from PIL import Image
+
 SOURCE_FOLDER_MAP = {
     "plantvillage": {
         "Cercospora_leaf_spot Gray_leaf_spot": "gray_leaf_spot",
@@ -19,6 +21,7 @@ SOURCE_FOLDER_MAP = {
 
 def build_raw_manifest(raw_root: Path, out_csv: Path) -> list[dict]:
     rows: list[dict] = []
+    skipped = 0
     for source, folder_map in SOURCE_FOLDER_MAP.items():
         source_dir = raw_root / source
         if not source_dir.exists():
@@ -29,6 +32,13 @@ def build_raw_manifest(raw_root: Path, out_csv: Path) -> list[dict]:
                 continue
             for img in sorted(class_dir.iterdir()):
                 if img.suffix.lower() not in {".jpg", ".jpeg", ".png"}:
+                    continue
+                try:
+                    with Image.open(img) as im:
+                        im.load()
+                except Exception:
+                    skipped += 1
+                    print(f"  skipping unreadable image: {img.relative_to(raw_root.parent)}")
                     continue
                 leaf_id = img.name.split("__")[0] if source == "plantvillage" else img.stem
                 rows.append(
@@ -42,6 +52,8 @@ def build_raw_manifest(raw_root: Path, out_csv: Path) -> list[dict]:
                         "class": class_name,
                     }
                 )
+    if skipped:
+        print(f"skipped {skipped} unreadable image(s)")
     if not rows:
         raise ValueError(f"no images found under {raw_root}; expected data/raw/<source>/<class_folder>")
     out_csv.parent.mkdir(parents=True, exist_ok=True)

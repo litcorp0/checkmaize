@@ -2,17 +2,20 @@ import csv
 from pathlib import Path
 import tempfile
 
+import numpy as np
+from PIL import Image
+
 from data.make_manifest import build_raw_manifest
 
 
 def _make_tree(root: Path) -> None:
     pv = root / "plantvillage" / "Common_rust_"
     pv.mkdir(parents=True)
-    (pv / "leafA__1.jpg").touch()
-    (pv / "leafA__2.jpg").touch()
+    for name in ("leafA__1.jpg", "leafA__2.jpg"):
+        Image.fromarray(np.zeros((8, 8, 3), dtype=np.uint8)).save(pv / name)
     g = root / "ccmt_ghana" / "Leaf blight"
     g.mkdir(parents=True)
-    (g / "blight_01.jpg").touch()
+    Image.fromarray(np.zeros((8, 8, 3), dtype=np.uint8)).save(g / "blight_01.jpg")
 
 
 def test_build_raw_manifest_maps_and_groups():
