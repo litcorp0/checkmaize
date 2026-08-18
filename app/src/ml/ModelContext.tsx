@@ -3,7 +3,7 @@ import { MaizeClassifier } from './onnx';
 import { preprocessImage } from './preprocess';
 import type { Prediction } from './contract';
 
-const modelModule = require('../../assets/model/model_int8.onnx') as number;
+const modelModule = require('../../assets/model/model.onnx') as number;
 
 export interface ModelMetrics {
   model: string;

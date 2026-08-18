@@ -18,7 +18,7 @@ The project has two halves:
    so we use **Google Colab** — a free website where Google lends you a fast
    computer with a graphics card (GPU) that runs in your browser.
 2. **The body** — the CheckMaize phone app (Expo/React Native). It holds the
-   trained brain (as a small file called `model_int8.onnx`) and runs it
+   trained brain (as a small file called `model.onnx`) and runs it
    **completely offline** on the phone.
 
 The workflow in one sentence: **on Colab we download pictures of diseased maize
@@ -30,7 +30,7 @@ into the app → build the app → install it on a phone.**
   ----------------                         -------------                 -----
   Notebook 01: build picture sets ──►  data/manifests (CSV files)
   Notebook 02: train 5 brains     ──►  pick the best one
-  Notebook 03: shrink the brain   ──►  app/assets/model/model_int8.onnx ──► APK install
+   Notebook 03: shrink the brain   ──►  app/assets/model/model.onnx ──► APK install
 ```
 
 **Time needed:** about 4–6 hours total, mostly waiting for downloads and training.
@@ -476,7 +476,7 @@ JSON block with `model`, `test_accuracy`, etc.
 ### Step 3.6 — Run Cell 5 (get everything onto your computer)
 
 Run Cell 5. It produces:
-- `artifacts.zip` — contains `model_int8.onnx` (the squeezed brain), `labels.json`, `metrics.json`
+- `artifacts.zip` — contains `model.onnx` (the trained brain), `labels.json`, `metrics.json`
 - `fixtures.zip` — the parity-test pictures the app uses to double-check its math
 - `onnx-contract.md` — the technical agreement between Python and the app
 
@@ -490,7 +490,7 @@ On your computer:
 
 1. Unzip `artifacts.zip`. Copy these three files into
    `checkmaize/app/assets/model/`:
-   - `model_int8.onnx`
+   - `model.onnx`
    - `labels.json`
    - `metrics.json`
    (Overwrite the README.txt file that explains what belongs there — no,
