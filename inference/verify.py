@@ -28,7 +28,7 @@ def verify(checkpoint, fp32_path, int8_path, test_manifest, data_root) -> dict:
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
     test_ds = ManifestDataset(test_manifest, Path(data_root), limit=64)
-    loader = DataLoader(test_ds, batch_size=1, shuffle=False)
+    loader = DataLoader(test_ds, batch_size=16, shuffle=False)
     torch_logits, onnx_logits = [], []
     fp32_sess = ort.InferenceSession(str(fp32_path), providers=["CPUExecutionProvider"])
     with torch.no_grad():
@@ -39,7 +39,7 @@ def verify(checkpoint, fp32_path, int8_path, test_manifest, data_root) -> dict:
     onnx_logits = np.concatenate(onnx_logits)
     parity_max_diff = float(np.abs(torch_logits - onnx_logits).max())
     full_ds = ManifestDataset(test_manifest, Path(data_root))
-    full_loader = DataLoader(full_ds, batch_size=1, shuffle=False)
+    full_loader = DataLoader(full_ds, batch_size=32, shuffle=False)
     fp32_acc = _top1(fp32_sess, full_loader)
     int8_sess = ort.InferenceSession(str(int8_path), providers=["CPUExecutionProvider"])
     int8_acc = _top1(int8_sess, full_loader)

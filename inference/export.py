@@ -7,7 +7,7 @@ from training.data import CLASSES, MEAN, STD
 from training.train import build_model
 
 
-def export_onnx(checkpoint: Path, out_path: Path, opset: int = 18) -> None:
+def export_onnx(checkpoint: Path, out_path: Path, opset: int = 17) -> None:
     ckpt = torch.load(checkpoint, map_location="cpu")
     model = build_model(ckpt["arch"], len(ckpt["class_names"]))
     model.load_state_dict(ckpt["state_dict"])
@@ -20,6 +20,8 @@ def export_onnx(checkpoint: Path, out_path: Path, opset: int = 18) -> None:
         input_names=["input"],
         output_names=["output"],
         opset_version=opset,
+        dynamic_axes={"input": {0: "batch"}, "output": {0: "batch"}},
+        dynamo=False,
     )
 
 
@@ -54,7 +56,7 @@ enforces it.
 
 ## Runtime
 
-- ONNX opset 18, fp32, int8 dynamic quantization for the shipped model.
+- ONNX opset 17, fp32, int8 dynamic quantization for the shipped model.
 - No float16 tensors anywhere (Hermes/RN 0.86 has no Float16Array).
 """
     )
