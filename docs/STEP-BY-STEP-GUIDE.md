@@ -118,6 +118,36 @@ type and run them from VS Code.
 
 ---
 
+## Part 0.7 — Browser Colab quick path (one file, everything)
+
+If you prefer the Colab website (colab.research.google.com) instead of VS Code,
+use the all-in-one notebook: **`colab/00_full_run.ipynb`**. One upload, one
+session, everything in order:
+
+1. Go to **colab.research.google.com** → **File → Upload notebook** →
+   pick `colab/00_full_run.ipynb` from your project folder.
+2. **Runtime → Change runtime type → T4 GPU → Save**, then connect.
+3. Run the cells **in order, top to bottom**:
+   - Cells 1–5: data (PlantVillage + Ghana + splits) — ~45 minutes.
+   - Cell 6: mounts your Google Drive and restores any earlier progress (browser only).
+   - Cell 7: the big training run (~2–3 hours — keep the tab open).
+   - Cells 8–14: scoreboard, winner, export, and the downloads.
+4. At the end you download four zips: `splits.zip`, `report.zip`, `runs.zip`,
+   and `artifacts.zip` + `fixtures.zip`. Save them for the assistant to commit.
+
+**Why one file?** The Colab website gives every notebook its own temporary
+computer — two notebooks cannot share the downloaded pictures. One file keeps
+everything on one computer from start to finish.
+
+**If the session drops mid-training:** reconnect, re-run Cells 1–5 (~45
+minutes), then the training cell. Finished models are restored from your
+Google Drive (mounted by Cell 6) and are skipped, so you lose almost nothing.
+
+VS Code users: keep using the three notebooks (Parts 1–3) — the extension
+shares one cloud computer between notebooks, so this is not needed.
+
+---
+
 ## Part 1 — Build the picture sets (Colab Notebook 01, ~45 minutes)
 
 This step gathers ~6,500 maize leaf pictures:
@@ -615,7 +645,8 @@ If EAS is not available to you:
 | `NameError: name 'REPO' is not defined` | You skipped Cell 1 or the kernel restarted. Just run Cell 1 once, then re-run your cell — the other cells now find the repo by themselves. |
 | Notebook 02 Cell 2 cannot find `data/raw/...` | The cloud computer forgets downloads between notebooks. Re-run Notebook 01 Cells 2 and 3, then continue. |
 | Cell 1 prints `GPU available: False` | In VS Code: Colab icon → disconnect → connect again choosing **T4 GPU**. Browser: Runtime → Change runtime type → T4 GPU. Then re-run Cell 1. |
-| Runtime disconnects mid-training | Reconnect, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. |
+| Runtime disconnects mid-training | Reconnect, re-run Cell 1, then re-run Cell 3 — it restarts the interrupted model. In the browser all-in-one notebook: re-run Cells 1–5, then Cell 7 — finished models are restored from Google Drive and skipped. |
+| `git pull` fails with `untracked working tree files would be overwritten` | The notebooks now clean `data/manifests` automatically before pulling. If you still see it, run a new cell: `!cd /content/checkmaize && git clean -fdq data/manifests && git pull` and re-run the failed cell. |
 | Kaggle download requires login | Sign in to Kaggle with your Google account, then click Download on the dataset page. |
 | The VS Code cell says the zip is at `/content/...` but I can't see it | Open the Colab extension's file explorer (Colab icon → the file tree view) and navigate to `/content`. |
 | Dragging the dataset zip into the file explorer does nothing | The upload can take many minutes for ~1.3 GB. Watch VS Code's status bar; when the progress disappears, re-run Cell 3. |

@@ -29,6 +29,12 @@ colab.research.google.com → File → Upload notebook → run cells. Uploads go
 through the left files pane; `files.download()` sends artifacts to your
 browser's Downloads folder.
 
+**Browser users: prefer `colab/00_full_run.ipynb`** — the all-in-one notebook.
+The browser gives each notebook its own ephemeral machine, so the three-part
+flow cannot share downloaded data between notebooks; the combined notebook
+runs everything in one session. It also mounts Google Drive (optional) to
+back up finished models and resume after a dropped session.
+
 ## Prerequisites per notebook
 
 - Notebook 01: PlantVillage downloads automatically (Hugging Face). The Ghana
@@ -40,6 +46,9 @@ browser's Downloads folder.
 
 ## Notebooks
 
+0. `colab/00_full_run.ipynb` - **browser one-shot**: everything from 1-3 in a
+   single session, with optional Google Drive backup/resume. Artifacts: all
+   zips from below.
 1. `colab/01_dataset.ipynb` - extracts PlantVillage + CCMT, builds `raw.csv`,
    splits, tests. Artifact: `splits.zip` -> local `data/manifests/`, commit.
 2. `colab/02_train_benchmark.ipynb` - smoke tests, then full 5-model benchmark
@@ -54,10 +63,12 @@ browser's Downloads folder.
 
 - The GitHub repo must be **public** — the cloud runtime has no GitHub
   credentials and cannot clone private repos.
-- Cloud runtimes are ephemeral: raw data must be re-downloaded/re-uploaded
-  each session (the repo itself persists on GitHub / can be re-dragged in).
-- If the runtime drops mid-training, reconnect, re-run Cell 1, then re-run the
-  training cell — it restarts the interrupted model.
+- Cloud runtimes are ephemeral: raw data must be re-downloaded each session
+  (the repo itself persists on GitHub / can be re-dragged in).
+- If the runtime drops mid-training, reconnect and re-run the connect + data
+  cells, then the training cell — `benchmarks/compare.py` skips models whose
+  `metrics.json` already exists, and the all-in-one notebook restores those
+  from Google Drive, so finished models are not re-trained.
 - If Cell 1 prints `GPU available: False`, reconnect choosing a T4 GPU runtime.
 - torch/torchvision versions on the runtime are managed by Colab; do not pin
   them manually.

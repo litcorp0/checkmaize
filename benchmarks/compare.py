@@ -9,6 +9,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import shutil
 import torch
 
 from training.train import build_model
@@ -23,10 +24,30 @@ def count_params(arch: str) -> int:
 
 
 def run_training(config_path: Path, out_dir: Path) -> None:
+    if (out_dir / "metrics.json").exists():
+        print(f"=== {out_dir.name} already trained (metrics.json found) - skipping ===")
+        return
     subprocess.run(
         [sys.executable, "-m", "training.train", "--config", str(config_path), "--out-dir", str(out_dir)],
         check=True,
     )
+
+
+def backup_run(out_dir: Path) -> None:
+    targets = [Path("/content/backup_runs")]
+    drive_root = Path("/content/drive/MyDrive/checkmaize_backup")
+    if Path("/content/drive/MyDrive").is_dir():
+        targets.append(drive_root)
+    for base in targets:
+        try:
+            dst = base / "runs" / out_dir.name
+            dst.mkdir(parents=True, exist_ok=True)
+            for name in ("best.pt", "metrics.json", "model.onnx"):
+                src = out_dir / name
+                if src.exists():
+                    shutil.copy(src, dst / name)
+        except OSError:
+            pass
 
 
 def build_comparison_rows(runs_dir: Path, onnx_bytes: dict[str, int]) -> list[dict]:
@@ -64,6 +85,7 @@ def main() -> None:
                 checkpoint=args.runs_dir / m / "best.pt",
                 out_path=args.runs_dir / m / "model.onnx",
             )
+            backup_run(args.runs_dir / m)
     for m in MODELS:
         p = args.runs_dir / m / "model.onnx"
         onnx_bytes[m] = p.stat().st_size if p.exists() else 0
