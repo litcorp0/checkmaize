@@ -1,16 +1,24 @@
 import argparse
+import tempfile
 from pathlib import Path
 
+import onnx
+from onnx import shape_inference
 from onnxruntime.quantization import QuantType, quantize_dynamic
 
 
 def quantize(fp32_path: Path, out_path: Path) -> None:
-    quantize_dynamic(
-        str(fp32_path),
-        str(out_path),
-        weight_type=QuantType.QUInt8,
-        per_channel=True,
-    )
+    model = onnx.load(str(fp32_path))
+    model = shape_inference.infer_shapes(model, check_type=False, strict_mode=False)
+    with tempfile.TemporaryDirectory() as td:
+        clean = Path(td) / "model_clean.onnx"
+        onnx.save(model, str(clean))
+        quantize_dynamic(
+            str(clean),
+            str(out_path),
+            weight_type=QuantType.QUInt8,
+            per_channel=True,
+        )
 
 
 def main() -> None:
