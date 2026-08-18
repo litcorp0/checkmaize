@@ -204,18 +204,14 @@ Face — no `datasets` library involved, which avoids version problems.)
 
 ### Step 1.5 — Get the Ghana dataset onto the cloud and run Cell 3
 
-Cell 3 has two ways to get the dataset onto the cloud machine. **Try OPTION A
-first.**
+Cell 3 has two ways to get the dataset onto the cloud machine.
 
-**OPTION A (easiest — pick the file from your computer):**
+> **VS Code: use OPTION B** — the OPTION A file-picker only works in the
+> browser version of Colab, not in the VS Code extension.
 
-1. Press ▶ on Cell 3. It shows a file-picker button — click it and choose the
-   zip you downloaded in Step 1.1 (`archive.zip` or
-   `crop-pest-and-disease-detection.zip`).
-2. Wait for the upload bar to finish, then the rest of the cell runs by
-   itself (extraction takes a few minutes).
-3. If no file-picker appears (or it shows an error): press the stop button on
-   the cell and use OPTION B.
+**OPTION A (browser Colab only):** press ▶ on Cell 3, click the file-picker
+button, choose the zip you downloaded in Step 1.1, wait for the upload bar,
+and the rest of the cell runs by itself.
 
 **OPTION B (the cloud downloads it directly from Kaggle — nothing to upload):**
 
