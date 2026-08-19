@@ -10,6 +10,7 @@ ios/
 data/raw/
 artifacts/
 *.onnx
+!app/assets/model/model.onnx
 *.pt
 *.zip
 .DS_Store

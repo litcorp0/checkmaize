@@ -1,0 +1,8 @@
+{
+  "model": "mobilenet_v3_small",
+  "test_accuracy": 0.8562628336755647,
+  "macro_f1": 0.8637256100997238,
+  "onnx_bytes": 6097447,
+  "int8_test_accuracy": 0.14784394250513347,
+  "shipped": "fp32"
+}

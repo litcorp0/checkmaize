@@ -88,7 +88,10 @@ def main() -> None:
             backup_run(args.runs_dir / m)
     for m in MODELS:
         p = args.runs_dir / m / "model.onnx"
-        onnx_bytes[m] = p.stat().st_size if p.exists() else 0
+        data_p = args.runs_dir / m / "model.onnx.data"
+        onnx_bytes[m] = (p.stat().st_size if p.exists() else 0) + (
+            data_p.stat().st_size if data_p.exists() else 0
+        )
     rows = build_comparison_rows(args.runs_dir, onnx_bytes)
     args.report_dir.mkdir(parents=True, exist_ok=True)
     with (args.report_dir / "comparison.csv").open("w", newline="") as f:
