@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useClassifier } from '../ml/ModelContext';
+import { CONTRACT } from '../ml/contract';
 
 export default function AboutScreen() {
-  const { metrics, classify } = useClassifier();
+  const { metrics, classifyTensor, ready } = useClassifier();
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
 
   const timeInference = async () => {
+    const tensor = new Float32Array(CONTRACT.size * CONTRACT.size * 3);
     const start = Date.now();
-    await classify('latency-probe');
+    await classifyTensor(tensor);
     setLatencyMs(Date.now() - start);
   };
 
@@ -26,7 +28,7 @@ export default function AboutScreen() {
       ) : (
         <Text style={styles.line}>Model metrics not bundled.</Text>
       )}
-      <Pressable style={styles.button} onPress={timeInference}>
+      <Pressable style={styles.button} onPress={timeInference} disabled={!ready}>
         <Text style={styles.buttonText}>Time one on-device inference</Text>
       </Pressable>
       {latencyMs != null && <Text style={styles.line}>Inference took {latencyMs} ms</Text>}

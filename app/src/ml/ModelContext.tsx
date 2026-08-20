@@ -17,6 +17,7 @@ export interface ModelMetrics {
 interface ModelContextValue {
   ready: boolean;
   classify: (uri: string) => Promise<Prediction[]>;
+  classifyTensor: (tensor: Float32Array) => Promise<Prediction[]>;
   metrics: ModelMetrics | null;
 }
 
@@ -57,6 +58,12 @@ export function ModelProvider({ children }: { children: React.ReactNode }) {
           throw new Error('classifier not ready');
         }
         const tensor = await preprocessImage(uri);
+        return classifier.classify(tensor);
+      },
+      classifyTensor: async (tensor: Float32Array) => {
+        if (!classifier) {
+          throw new Error('classifier not ready');
+        }
         return classifier.classify(tensor);
       },
       metrics,
